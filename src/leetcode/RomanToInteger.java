@@ -1,5 +1,9 @@
 package leetcode;
 
+/**
+ * Given a roman numeral, convert it to an integer.
+ */
+
 public class RomanToInteger {
     class Solution {
         public int romanToInt(String s) {
