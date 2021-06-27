@@ -33,7 +33,7 @@ public class LongestCommonPrefix {
     }
 
     /**
-     * Improved solution a month after
+     * Improved solution
      */
     class Solution2 {
         public String longestCommonPrefix(String[] strs) {

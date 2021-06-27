@@ -19,7 +19,7 @@ public class SearchInsertPosition {
     }
 
     /**
-     * Improved solution a month after
+     * Improved solution
      */
     class Solution2 {
         public int searchInsert(int[] nums, int target) {
