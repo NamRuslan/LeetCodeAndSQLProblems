@@ -246,3 +246,51 @@ select avg(price) from
     ) pc_lap
 join product p on p.model = pc_lap.model
 where p.maker = 'a'
+
+
+#27
+Find out the average hard disk drive capacity of PCs produced by makers who also manufacture printers.
+Result set: maker, average HDD capacity.
+
+select p.maker, avg(pc.hd)
+from pc
+inner join product p
+on p.model = pc.model
+where p.maker in(
+    select maker from product
+    where type = 'printer'
+)
+group by p.maker
+
+
+#28
+Using Product table, find out the number of makers who produce only one model.
+
+select count(maker) from (
+select maker, count(model) as model_count from product
+group by maker
+having count(model) = 1) as maker_count
+
+
+#35
+Find models in the Product table consisting either of digits only
+or Latin letters (A-Z, case insensitive) only.
+Result set: model, type.
+
+select model, type from product
+where model not like '%[^0-9]%' or model not like '%[^a-zA-Z]%'
+
+
+#40
+Get the makers who produce only one product type and more than one model. Output: maker, type.
+
+select maker, type from product
+where maker in (
+    select maker from product
+    group by maker
+    having count(distinct type) = 1
+    )
+group by maker, type
+having count(model) > 1
+
+
