@@ -15,6 +15,8 @@ Income(code, point, date, inc)
 Outcome(code, point, date, out)
 Here, the date column doesn’t include the time part, either.
 
+
+
 #29
 Under the assumption that receipts of money (inc) and payouts (out)
 are registered not more than once a day for each collection point
