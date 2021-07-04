@@ -49,3 +49,75 @@ select point, date, sum(out_sum), sum(inc_sum) from
 group by point, date
 
 
+#59
+Calculate the cash balance of each buy-back center for the database
+with money transactions being recorded not more than once a day.
+Result set: point, balance.
+
+select A.point, (coalesce(i, 0) - coalesce(o, 0)) from (
+    select sum(inc) as i, point from income_o
+    group by point
+    ) as A
+full join (
+    select sum(out) as o, point from outcome_o
+    group by point
+    ) as B
+on A.point = B.point
+
+
+#60
+For the database with money transactions being recorded not more than once a day,
+calculate the cash balance of each buy-back center at the beginning of 4/15/2001.
+Note: exclude centers not having any records before the specified date.
+Result set: point, balance
+
+select A.point,
+case
+when o is null
+then i
+else i - o
+end
+remain from (
+    select sum(inc) as i, point from income_o
+    where date < '2001/04/15'
+    group by point) as A
+left join (
+    select sum(out) as o, point from outcome_o
+    where date < '2001/04/15'
+    group by point
+    ) as B
+on A.point = B.point
+
+
+#62
+For the database with money transactions being recorded not more than once a day,
+calculate the total cash balance of all buy-back centers at the beginning of 04/15/2001.
+
+select (
+select sum(inc) from income_o
+where date < '2001-04-15'
+)
+-
+(select sum(out) from outcome_o
+where date < '2001-04-15'
+) as Remain
+
+
+#64
+Using the Income and Outcome tables, determine for each buy-back center
+the days when it received funds but made no payments, and vice versa.
+Result set: point, date, type of operation (inc/out), sum of money per day.
+
+select i.point, i.date, 'inc' as operation, sum(inc) from income i
+left join outcome o
+on i.point = o.point and i.date = o.date
+where o.date is null
+group by i.point, i.date
+union
+select o.point, o.date, 'out' as operation, sum(out) from income i
+right join outcome o
+on i.point = o.point and i.date = o.date
+where i.date is null
+group by o.point, o.date
+
+

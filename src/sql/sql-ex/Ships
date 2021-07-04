@@ -294,3 +294,49 @@ left join (
     where result = 'sunk') as a
 on c.class = a.class
 group by c.class
+
+
+#57
+For classes having irreparable combat losses and at least three ships in the database,
+display the name of the class and the number of ships sunk.
+
+select sunken_ships.class, count(sunken_ships.class) from (
+    select class, o.ship from outcomes o
+    join classes c
+    on c.class = o.ship
+    where result = 'sunk'
+    union
+    select class, ship from ships
+    join outcomes
+    on ship = name
+    where result = 'sunk') as sunken_ships
+where sunken_ships.class in (
+    select T.class from (
+        select s.class, name as names from ships s
+        join classes c
+        on c.class = s.class
+        union
+        select class, ship as names from outcomes
+        join classes
+        on class = ship ) as T
+    group by T.class
+    having count(names) >= 3)
+group by class
+
+
+#70
+Get the battles in which at least three ships from the same country took part.
+
+select distinct battle from (
+    select battle, country, name as names from ships s
+    join classes c
+    on c.class = s.class
+    join outcomes o
+    on ship = name
+    union
+    select battle, country, ship as names from outcomes o
+    join classes c
+    on ship = class
+    ) as M
+group by battle, country
+having count(names) >= 3
