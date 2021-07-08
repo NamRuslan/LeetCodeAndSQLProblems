@@ -340,3 +340,24 @@ select distinct battle from (
     ) as M
 group by battle, country
 having count(names) >= 3
+
+
+#73
+For each country, determine the battles in which the ships of this country did not participate.
+Result set: country, battle.
+
+select country, name from classes, battles
+except
+    select country, name from (
+    select country, battle as name
+    from outcomes o
+    join ships s
+    on ship = s.name
+    join classes c
+    on s.class = c.class
+    union
+    select country, battle
+    from outcomes
+    join classes
+    on class = ship
+    ) as T
