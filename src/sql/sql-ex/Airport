@@ -76,3 +76,26 @@ end)
 
 select count(*) from q
 where c = (select max(c) from q)
+
+
+#72
+
+Among the customers using a single airline, find distinct passengers who have flown most frequently.
+Result set: passenger name, number of trips.
+
+with T as (
+    select id_psg, count(t.trip_no) as trip_count, count(distinct id_comp) as comp_count
+    from pass_in_trip pit
+    join trip t
+    on t.trip_no = pit.trip_no
+    group by id_psg
+    having count(distinct id_comp) = 1
+    )
+
+select name, T.trip_count from passenger p
+join T
+on T.id_psg = p.id_psg
+where p.id_psg in (
+    select id_psg from T
+    where trip_count = (select max(trip_count) from T)
+    )
