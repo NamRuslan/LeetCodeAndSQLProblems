@@ -294,3 +294,32 @@ group by maker, type
 having count(model) > 1
 
 
+#75
+For makers who have products with a known price in at least one of the Laptop, PC, or Printer tables,
+find the maximum price for each product type.
+Output: maker, maximum price of laptops, maximum price of PCs, maximum price of printers.
+For missing products/prices, use NULL.
+
+select
+maker,
+coalesce(max(lap.price), null) as lap_price,
+coalesce(max(pc.price), null) as pc_price,
+coalesce(max(pr.price), null) as pr_price
+from product p
+full join pc
+on pc.model = p.model
+full join laptop lap
+on lap.model = p.model
+full join printer pr
+on pr.model = p.model
+group by maker
+except
+    select maker, lap.price, pc.price, pr.price
+    from product p
+    full join pc
+    on pc.model = p.model
+    full join laptop lap
+    on lap.model = p.model
+    full join printer pr
+    on pr.model = p.model
+    where pc.price is null and lap.price is null and pr.price is null
