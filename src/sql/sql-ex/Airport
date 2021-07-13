@@ -99,3 +99,20 @@ where p.id_psg in (
     select id_psg from T
     where trip_count = (select max(trip_count) from T)
     )
+
+
+#77
+Find the days with the maximum number of flights departed from Rostov.
+Result set: number of trips, date.
+
+with T as (
+    select count(distinct t.trip_no) as qty, date from trip t
+    join pass_in_trip pit
+    on t.trip_no = pit.trip_no
+    where town_from = 'rostov'
+    group by date)
+
+select qty, date from T
+where qty = (select max(qty) from T)
+
+
