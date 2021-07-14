@@ -253,3 +253,23 @@ having count(distinct student) >= 5
 
 
 
+620. Not Boring Movies
+Table: Cinema
++----------------+----------+
+| Column Name    | Type     |
++----------------+----------+
+| id             | int      |
+| movie          | varchar  |
+| description    | varchar  |
+| rating         | float    |
++----------------+----------+
+
+Write an SQL query to report the movies with an odd-numbered ID and a description that is not "boring".
+Return the result table in descending order by rating.
+
+select * from cinema
+where id % 2 != 0 and description not like ('%boring%')
+order by rating desc
+
+
+
