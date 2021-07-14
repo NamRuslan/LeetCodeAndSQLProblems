@@ -323,3 +323,13 @@ except
     full join printer pr
     on pr.model = p.model
     where pc.price is null and lap.price is null and pr.price is null
+
+
+#80
+Find the computer equipment makers not producing any PC models absent in the PC table.
+
+select distinct maker from product
+except
+select distinct maker from product
+where type = 'pc' and model not in (
+select model from pc)
