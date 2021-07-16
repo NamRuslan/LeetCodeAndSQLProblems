@@ -34,7 +34,7 @@ public class ArrangingCoins {
     }
 
     /**
-     * Improved solution (7ms -> 1ms)
+     * Improved solution (O(n) -> O(1))
      */
     class Solution2 {
         public int arrangeCoins(int n) {
