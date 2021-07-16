@@ -116,3 +116,22 @@ select qty, date from T
 where qty = (select max(qty) from T)
 
 
+
+
+#84
+For each airline, calculate the number of passengers carried in April 2003 (if there were any)
+by ten-day periods. Consider only flights that departed that month.
+Result set: company name, number of passengers carried for each ten-day period.
+
+select c.name,
+count(case when day(date) > 10 then null else day(date) end) as '1-10',
+count(case when day(date) < 11 or day(date) > 20 then null else day(date) end) as '11-20',
+count(case when day(date) < 21 then null else day(date) end) as '21-30'
+from company c
+join trip t
+on c.id_comp = t.id_comp
+join pass_in_trip pt
+on t.trip_no = pt.trip_no
+where month(date) = '04' and year(date) = '2003'
+group by c.name
+
