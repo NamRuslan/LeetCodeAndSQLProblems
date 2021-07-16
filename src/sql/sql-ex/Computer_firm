@@ -333,3 +333,26 @@ except
 select distinct maker from product
 where type = 'pc' and model not in (
 select model from pc)
+
+
+
+#85
+Get makers producing either printers only or personal computers only;
+in case of PC manufacturers they should produce at least 3 models.
+
+
+select maker from (
+    select maker from product
+    group by maker
+    having count(model) >= 3
+    except
+    select maker from product
+    where type in ('laptop', 'printer')
+    ) as T
+union
+select maker from (
+    select maker from product
+    except
+    select maker from product
+    where type in ('laptop', 'pc')
+    ) as S
