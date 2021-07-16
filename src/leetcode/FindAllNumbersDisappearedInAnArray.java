@@ -41,7 +41,7 @@ public class FindAllNumbersDisappearedInAnArray {
     }
 
     /**
-     * Improved solution(Follow up: No extra space)
+     * Improved solution(Follow-up question: No extra space)
      */
     class Solution2 {
         public List<Integer> findDisappearedNumbers(int[] nums) {
