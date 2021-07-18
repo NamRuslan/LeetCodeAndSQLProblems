@@ -134,4 +134,3 @@ join pass_in_trip pt
 on t.trip_no = pt.trip_no
 where month(date) = '04' and year(date) = '2003'
 group by c.name
-
