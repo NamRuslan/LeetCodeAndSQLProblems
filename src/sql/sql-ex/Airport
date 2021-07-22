@@ -134,3 +134,25 @@ join pass_in_trip pt
 on t.trip_no = pt.trip_no
 where month(date) = '04' and year(date) = '2003'
 group by c.name
+
+
+
+#88
+Among those flying with a single airline find the names of different passengers who have flown most often.
+Result set: passenger name, number of trips, and airline name.
+
+with T as (
+select pt.id_psg, count(pt.trip_no) as trip_count, max(id_comp) as id_comp from pass_in_trip pt
+join trip t
+on t.trip_no = pt.trip_no
+group by pt.id_psg
+having count(distinct id_comp) = 1
+)
+
+select p.name, trip_count, c.name from T
+join passenger p
+on p.id_psg = T.id_psg
+join company c
+on c.id_comp = T.id_comp
+where trip_count = (select max(trip_count) from T)
+
