@@ -356,3 +356,16 @@ select maker from (
     select maker from product
     where type in ('laptop', 'pc')
     ) as S
+
+
+
+#89
+Get makers having most models in the Product table, as well as those having least.
+Output: maker, number of models.
+
+
+with T as (select maker, count(model) as model_count from product
+group by maker)
+
+select maker, model_count from T
+where model_count in (select max(model_count) from T) or model_count in (select min(model_count) from T)
