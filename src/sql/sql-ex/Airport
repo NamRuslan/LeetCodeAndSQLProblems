@@ -156,3 +156,46 @@ join company c
 on c.id_comp = T.id_comp
 where trip_count = (select max(trip_count) from T)
 
+
+
+#95
+Using the Pass_in_Trip table, calculate for each airline:
+1) the number of performed flights;
+2) the number of plane types used;
+3) the number of different passengers that have been transported;
+4) the total number of passengers that have been transported by the company.
+Output: airline name, 1), 2), 3), 4).
+
+
+with flight_count as
+    (select id_comp, count(pt.trip_no) as trip_count from
+        (select trip_no from pass_in_trip
+         group by trip_no, date) as pt
+    join trip t
+    on t.trip_no = pt.trip_no
+    group by id_comp),
+plane_types as
+    (select id_comp, count(distinct plane) as plane_count from trip t
+    join pass_in_trip pt
+    on t.trip_no = pt.trip_no
+    group by id_comp),
+unique_pass as
+    (select id_comp, count(distinct id_psg) as unique_count from trip t
+    join pass_in_trip pt
+    on t.trip_no = pt.trip_no
+    group by id_comp),
+pass_count as
+    (select id_comp, count(id_psg) as all_count from trip t
+    join pass_in_trip pt
+    on t.trip_no = pt.trip_no
+    group by id_comp)
+
+select c.name, fc.trip_count, pt.plane_count, up.unique_count, pc.all_count from company c
+join flight_count fc
+on c.id_comp = fc.id_comp
+join plane_types pt
+on c.id_comp = pt.id_comp
+join unique_pass up
+on c.id_comp = up.id_comp
+join pass_count pc
+on c.id_comp = pc.id_comp
