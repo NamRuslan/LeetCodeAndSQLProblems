@@ -68,9 +68,7 @@ static class Solution {
     }
 }
 
-}
-
-class TreeNode {
+private class TreeNode {
     int val;
     TreeNode left;
     TreeNode right;
@@ -81,4 +79,6 @@ class TreeNode {
         this.left = left;
         this.right = right;
     }
+}
+
 }
